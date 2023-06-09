@@ -31,7 +31,7 @@ public class Config
 
     @Bean("login")
     @Scope("singleton")
-    public RedisTemplate<String, Object> redisTemplate()
+    public RedisTemplate<String, Long> redisTemplate()
     {
         final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setHostName(redisHost);
@@ -47,7 +47,7 @@ public class Config
         final JedisConnectionFactory jedisFac = new JedisConnectionFactory(config, jedisClient);
         jedisFac.afterPropertiesSet();
 
-        RedisTemplate<String, Object> r = new RedisTemplate<String, Object>();
+        RedisTemplate<String, Long> r = new RedisTemplate<String, Long>();
         r.setConnectionFactory(jedisFac);
         r.setKeySerializer(new StringRedisSerializer());
         r.setValueSerializer(r.getKeySerializer());

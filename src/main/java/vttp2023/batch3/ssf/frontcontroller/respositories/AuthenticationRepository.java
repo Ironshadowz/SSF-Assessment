@@ -11,8 +11,23 @@ import vttp2023.batch3.ssf.frontcontroller.model.User;
 
 @Repository
 public class AuthenticationRepository 
-{
+{	
+	@Autowired
+	@Qualifier("login")
+	private RedisTemplate<String, Long> template;
 	
+	public void saveDisabledTime(String name, Long time)
+	{
+		template.opsForValue()
+			.set(name, time);
+	}
+
+	public Long checkTime(String name)
+	{
+		Long endTime = template.opsForValue()
+						.get(name);
+		return endTime;
+	}
 	// TODO Task 5
 	// Use this class to implement CRUD operations on Redis
 

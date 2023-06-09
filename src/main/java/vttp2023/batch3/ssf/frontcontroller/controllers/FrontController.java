@@ -16,7 +16,7 @@ import vttp2023.batch3.ssf.frontcontroller.model.User;
 import vttp2023.batch3.ssf.frontcontroller.services.AuthenticationService;
 
 @Controller
-//@RequestMapping (path="/")
+@RequestMapping (path="/")
 public class FrontController 
 {
 	@Autowired
@@ -30,15 +30,52 @@ public class FrontController
 		return "view0";
 	}
 
-	@PostMapping (path="login", consumes ="application/x-www-form-urlencoded")
+	@PostMapping (path="/login", consumes ="application/x-www-form-urlencoded")
 	public String loginPage(@Valid User user, BindingResult bind, 
-								HttpSession session, Model model) throws Exception
+					HttpSession session, Model model) throws Exception
 	{
 		if(bind.hasErrors())
 		{
 			return "view0";
 		}
+
+		if(!session.getAttribute("answer").equals(user.getReply()))
+		{
+			user.setCount(user.getCount()+1);
+			if(user.getCount()>=3)
+			{
+				if(user.getDisabled())
+				{
+					//check if time has passed
+					if(userService.timeCheck(user.getName()))
+					{
+						user.setDisabled(false);
+					}
+					return "view0";
+				}
+				userService.disableUser(user.getName());
+				model.addAttribute("User", user.getName());
+				return "view2";
+			}
+			user.setAuthenticated(false);
+			session.setAttribute("count", user.getCount());
+
+			int x = userService.randomNum();
+			int y = userService.randomNum();
+			String xString = Integer.toString(x);
+			String yString = Integer.toString(y);
+			String opeartion = userService.randomOpe();
+			float xy = userService.calculate(x, y, opeartion);
+			String expression = xString+opeartion+yString;
+			String xyString = Float.toString(xy);
+
+			session.setAttribute("answer", xyString);
+			model.addAttribute("captcha", expression);
+			return "view0";
+		}
+	
 		Boolean isAuthen = userService.authenticate(user.getName(), user.getPassword());
+		
 		if(isAuthen==true)
 		{
 			user.setAuthenticated(true);
@@ -46,14 +83,26 @@ public class FrontController
 		} else
 		{	
 			user.setCount(user.getCount()+1);
+			if(user.getCount()==3)
+			{
+				userService.disableUser(user.getName());
+				user.setDisabled(true);
+				model.addAttribute("User", user.getName());
+				return "view2";
+			}
 			user.setAuthenticated(false);
 			session.setAttribute("count", user.getCount());
+
 			int x = userService.randomNum();
 			int y = userService.randomNum();
 			String xString = Integer.toString(x);
 			String yString = Integer.toString(y);
 			String opeartion = userService.randomOpe();
-			String expression = xString+opeartion+yString;
+			float xy = userService.calculate(x, y, opeartion);
+			String expression = "What is "+xString+opeartion+yString+"?";
+			String xyString = Float.toString(xy);
+
+			session.setAttribute("answer", xyString);
 			model.addAttribute("captcha", expression);
 		}
 		return "view0";

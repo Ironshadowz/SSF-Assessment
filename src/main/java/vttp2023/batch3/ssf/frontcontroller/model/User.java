@@ -17,7 +17,7 @@ public class User implements Serializable
     @NotNull (message="Name is empty")
     @Size (min=2, message="Name is too short")
     @NotEmpty (message="Name is empty")
-    private String name;
+    private String username;
 
     @NotNull (message="Password is empty")
     @Size (min=2, message="Password is too short")
@@ -27,25 +27,46 @@ public class User implements Serializable
     private boolean authenticated;
 
     private int count=0;
+
+    private String reply;
+
+    private Boolean disabled;
     
     @Override
     public String toString() {
-        return "User [name=" + name + ", password=" + password + ", authenticated=" + authenticated + ", count=" + count
+        return "User [name=" + username + ", password=" + password + ", authenticated=" + authenticated + ", count=" + count
                 + "]";
     }
+    
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
+    }
+
     public User()
     {
 
     }
     public User(String name, String password) {
-        this.name = name;
+        this.username = name;
         this.password = password;
     }
     public String getName() {
-        return name;
+        return username;
     }
     public void setName(String name) {
-        this.name = name;
+        this.username = name;
     }
     public String getPassword() {
         return password;
@@ -68,7 +89,7 @@ public class User implements Serializable
     public JsonObject toJson()
     {
         return Json.createObjectBuilder()
-                    .add("name", this.getName())
+                    .add("username", this.getName())
                     .add("password", this.getPassword())
                     .build();
     }
@@ -76,7 +97,7 @@ public class User implements Serializable
     public User fromJson(JsonObject o)
     {
         User currUser = new User();
-        currUser.setName(o.getString("name"));
+        currUser.setName(o.getString("username"));
         currUser.setPassword(o.getString("password"));
         return currUser;
     }
