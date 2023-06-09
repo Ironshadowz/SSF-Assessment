@@ -29,6 +29,12 @@ public class FrontController
 		m.addAttribute("User", new User());
 		return "view0";
 	}
+	@GetMapping (path="/retry")
+	public String Page(Model m, HttpSession sess)
+	{	
+		m.addAttribute("User", new User());
+		return "view0";
+	}
 
 	@PostMapping (path="/login", consumes ="application/x-www-form-urlencoded")
 	public String loginPage(@Valid User user, BindingResult bind, 
