@@ -15,26 +15,24 @@ import jakarta.validation.constraints.Size;
 public class User implements Serializable
 {
     @NotNull (message="Name is empty")
-    @Size (min=2, message="Name is too short")
-    @NotEmpty (message="Name is empty")
+    @Size (min = 2, message="Name is too short")
     private String username;
 
     @NotNull (message="Password is empty")
-    @Size (min=2, message="Password is too short")
-    @NotEmpty (message="Password is empty")
+    @Size (min = 2, message="Password is too short")
     private String password;
     
     private boolean authenticated;
 
-    private int count=0;
-
     private String reply;
 
-    private Boolean disabled;
+    private int count;
+
+    private Boolean disabled = false;
     
     @Override
     public String toString() {
-        return "User [name=" + username + ", password=" + password + ", authenticated=" + authenticated + ", count=" + count
+        return "User [name=" + username + ", password=" + password + ", authenticated=" + authenticated
                 + "]";
     }
     
@@ -53,7 +51,6 @@ public class User implements Serializable
     public void setReply(String reply) {
         this.reply = reply;
     }
-
     public User()
     {
 
@@ -62,12 +59,7 @@ public class User implements Serializable
         this.username = name;
         this.password = password;
     }
-    public String getName() {
-        return username;
-    }
-    public void setName(String name) {
-        this.username = name;
-    }
+    
     public String getPassword() {
         return password;
     }
@@ -80,16 +72,10 @@ public class User implements Serializable
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
     }
-    public int getCount() {
-        return count;
-    }
-    public void setCount(int count) {
-        this.count = count;
-    }
     public JsonObject toJson()
     {
         return Json.createObjectBuilder()
-                    .add("username", this.getName())
+                    .add("username", this.getUsername())
                     .add("password", this.getPassword())
                     .build();
     }
@@ -97,9 +83,25 @@ public class User implements Serializable
     public User fromJson(JsonObject o)
     {
         User currUser = new User();
-        currUser.setName(o.getString("username"));
+        currUser.setUsername(o.getString("username"));
         currUser.setPassword(o.getString("password"));
         return currUser;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
     
     

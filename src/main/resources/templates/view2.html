@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="#" data-th-action="/retry" method="Get">
+    <form action="#" data-th-action="@{/}" data-th-object="${User}" method="Get">
         <h1>
             Your login <span data-th-text="${User.username}"></span> has been deactivated for 30 mins
         </h1>

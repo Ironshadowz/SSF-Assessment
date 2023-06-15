@@ -14,19 +14,24 @@ public class AuthenticationRepository
 {	
 	@Autowired
 	@Qualifier("login")
-	private RedisTemplate<String, Long> template;
+	private RedisTemplate<String, String> template;
 	
-	public void saveDisabledTime(String name, Long time)
+	public void saveDisabledTime(String name, String time)
 	{
 		template.opsForValue()
 			.set(name, time);
 	}
 
-	public Long checkTime(String name)
+	public String checkTime(String name)
 	{
-		Long endTime = template.opsForValue()
+		String endTime = template.opsForValue()
 						.get(name);
 		return endTime;
+	}
+
+	public void deleteTime(String name)
+	{
+		template.delete(name);
 	}
 	// TODO Task 5
 	// Use this class to implement CRUD operations on Redis
