@@ -88,14 +88,34 @@ public class FrontController
 		{
 			//create captcha and add to model
 			System.out.println("captcha");
+			if(session.getAttribute(user.getUsername())==null)
+			{
+				int i = 1;
+				System.out.println(user.getUsername()+" count 1");
+				session.setAttribute(user.getUsername(), i);
+
+			} else
+			{
+				int count = (int) session.getAttribute(user.getUsername());
+				int newCount = count+1;
+				System.out.println(user.getUsername()+" count "+newCount);
+				session.setAttribute(user.getUsername(), newCount);
+			}
+			if((int)session.getAttribute(user.getUsername())>=3)
+			{
+				System.out.println("Locking "+user.getUsername());
+				userService.disableUser(user.getUsername());
+				model.addAttribute("User", user);
+				return "view2";
+			}
 			String captcha = userService.generateCaptcha(session);
 			System.out.println(captcha);
 			model.addAttribute("captcha", captcha);
 			return "view0";
 		}
+
 		session.removeAttribute("answer");
 		session.setAttribute("authen", true);
-		
 		return "redirect:/protected";
 	}
 

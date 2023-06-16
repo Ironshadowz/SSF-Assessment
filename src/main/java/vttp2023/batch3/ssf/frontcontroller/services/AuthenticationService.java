@@ -123,6 +123,7 @@ public class AuthenticationService
 				return false;
 			} else
 			{
+				System.out.println(username+" is still locked");
 				return true;
 			}
 		} catch(Exception ex)
