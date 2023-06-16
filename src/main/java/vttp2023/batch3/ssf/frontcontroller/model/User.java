@@ -1,14 +1,8 @@
 package vttp2023.batch3.ssf.frontcontroller.model;
 
-
-
 import java.io.Serializable;
-import java.util.Currency;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 

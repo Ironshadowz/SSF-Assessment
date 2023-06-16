@@ -1,8 +1,5 @@
 package vttp2023.batch3.ssf.frontcontroller.controllers;
 
-
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -96,8 +93,10 @@ public class FrontController
 			model.addAttribute("captcha", captcha);
 			return "view0";
 		}
-
-		return "view1";
+		session.removeAttribute("answer");
+		session.setAttribute("authen", true);
+		
+		return "redirect:/protected";
 	}
 
 
